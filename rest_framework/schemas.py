@@ -11,7 +11,7 @@ from django.utils import six
 from django.utils.encoding import force_text, smart_text
 from django.utils.translation import ugettext_lazy as _
 
-from rest_framework import exceptions, renderers, serializers
+from rest_framework import exceptions, generics, mixins, renderers, serializers
 from rest_framework.compat import (
     RegexURLPattern, RegexURLResolver, coreapi, coreschema, uritemplate,
     urlparse
@@ -140,6 +140,11 @@ def is_list_view(path, method, view):
 
     if method.lower() != 'get':
         return False
+    if isinstance(view, mixins.ListModelMixin):
+        return True
+    if isinstance(view, generics.RetrieveAPIView):
+        return False
+    # Otherwise when path ends in a variable it is assumed a singular lookup
     path_components = path.strip('/').split('/')
     if path_components and '{' in path_components[-1]:
         return False
