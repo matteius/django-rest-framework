@@ -142,7 +142,7 @@ def is_list_view(path, method, view):
         return False
     if isinstance(view, mixins.ListModelMixin):
         return True
-    if isinstance(view, generics.RetrieveAPIView):
+    if isinstance(view, mixins.RetrieveModelMixin):
         return False
     # Otherwise when path ends in a variable it is assumed a singular lookup
     path_components = path.strip('/').split('/')
